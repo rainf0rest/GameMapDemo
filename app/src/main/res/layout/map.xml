@@ -12,17 +12,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:id="@+id/textView" />
+        android:text="Game Map!"
+        android:id="@+id/mapText" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/con"
+    android:orientation="horizontal">
 
-    <Button
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Map"
-        android:id="@+id/mapSbtn"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="58dp" />
+        android:src="@mipmap/ic_launcher"/>
+
+
+</LinearLayout>
 
 
 </RelativeLayout>
