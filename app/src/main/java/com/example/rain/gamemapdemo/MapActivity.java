@@ -7,7 +7,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -19,6 +21,8 @@ public class MapActivity extends Activity implements GestureDetector.OnGestureLi
     private GestureDetector detector;
     private LinearLayout con;
     private int currentX, currentY;
+    private TextView mapText;
+    private ImageView chicken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,15 @@ public class MapActivity extends Activity implements GestureDetector.OnGestureLi
 
         detector = new GestureDetector(this, this);
         con = (LinearLayout) findViewById(R.id.con);
+        mapText = (TextView) findViewById(R.id.mapText);
+        chicken = (ImageView) findViewById(R.id.chic);
+
+        chicken.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MapActivity.this, "X:" + currentX + " Y:" + currentY, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
