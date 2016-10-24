@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GameMapDemo</string>
+    <string name="hello">Display!</string>
 </resources>

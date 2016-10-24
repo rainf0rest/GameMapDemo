@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.rain.gamemapdemo.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello"
+        android:id="@+id/serializableText"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Name:"
+        android:id="@+id/nameText"
+        android:textSize="@dimen/text_size"
+        android:layout_marginTop="107dp"
+        android:layout_below="@+id/serializableText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameEditText"
+        android:ems="10"
+        android:layout_alignTop="@+id/nameText"
+        android:layout_toRightOf="@+id/nameText"
+        android:layout_toEndOf="@+id/nameText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Age :"
+        android:id="@+id/ageText"
+        android:textSize="@dimen/text_size"
+        android:layout_below="@+id/nameEditText"
+        android:layout_toLeftOf="@+id/nameEditText"
+        android:layout_toStartOf="@+id/nameEditText"
+        android:layout_marginTop="61dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ageEditText"
+        android:layout_alignBottom="@+id/ageText"
+        android:layout_alignRight="@+id/nameEditText"
+        android:layout_alignEnd="@+id/nameEditText"
+        android:ems="10"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:id="@+id/serAddbtn"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp" />
+
+
+</RelativeLayout>
