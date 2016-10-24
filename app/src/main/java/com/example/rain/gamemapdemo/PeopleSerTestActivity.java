@@ -7,6 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Created by rain on 2016/10/24.
@@ -38,9 +45,26 @@ public class PeopleSerTestActivity extends Activity {
         add = (Button) findViewById(R.id.serAddbtn);
 
         sharedPreferences = getSharedPreferences("Testdata", MODE_PRIVATE);
-        //editor = sharedPreferences.edit();
+        editor = sharedPreferences.edit();
 
         peopleNum = sharedPreferences.getInt("peopleNumber", 0);
+        String s = sharedPreferences.getString("peopleData", null);
+
+
+        if(peopleNum != 0) {
+            try {
+                people = deSerialization(s);
+            }
+            catch (IOException e) {
+                Toast.makeText(PeopleSerTestActivity.this, "IoException: " + e.toString(), Toast.LENGTH_SHORT).show();
+            }
+            catch (ClassNotFoundException ex) {
+                Toast.makeText(PeopleSerTestActivity.this, "ClassNotFoundException: " + ex.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            print();
+        }
+
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +74,18 @@ public class PeopleSerTestActivity extends Activity {
 
                 people.setName(name);
                 people.setAge(age);
+
+                try {
+                    editor.putString("peopleData", serialize(people));
+                    peopleNum ++;
+                    editor.putInt("peopleNumber", peopleNum);
+                    editor.commit();
+
+                }
+                catch (IOException e) {
+                    Toast.makeText(PeopleSerTestActivity.this, "IoException: " + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+
 
                 print();
             }
@@ -63,6 +99,36 @@ public class PeopleSerTestActivity extends Activity {
         serTextview.append("age: " + people.getAge());
     }
 
+    //序列化对象
+
+    private String serialize(People p) throws IOException {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+                byteArrayOutputStream);
+        objectOutputStream.writeObject(p);
+        String serStr = byteArrayOutputStream.toString("ISO-8859-1");
+        serStr = java.net.URLEncoder.encode(serStr, "UTF-8");
+        objectOutputStream.close();
+        byteArrayOutputStream.close();
+        return serStr;
+    }
+
+    //反序列化对象
+
+    private People deSerialization(String str) throws IOException,
+            ClassNotFoundException {
+
+        String redStr = java.net.URLDecoder.decode(str, "UTF-8");
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+                redStr.getBytes("ISO-8859-1"));
+        ObjectInputStream objectInputStream = new ObjectInputStream(
+                byteArrayInputStream);
+        People p = (People) objectInputStream.readObject();
+        objectInputStream.close();
+        byteArrayInputStream.close();
+        return p;
+    }
 
 
 }
