@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 /**
  * Created by rain on 2016/10/24.
@@ -28,6 +29,7 @@ public class PeopleSerTestActivity extends Activity {
     private String name;
     private Button add;
     private EditText nameEdit, ageEdit;
+    private ArrayList<People> peoples;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,8 @@ public class PeopleSerTestActivity extends Activity {
         age = 0;
 
         people = new People(name, age);
+        peoples = new ArrayList<People>();
+
 
         serTextview = (TextView) findViewById(R.id.serializableText);
         nameEdit = (EditText) findViewById(R.id.nameEditText);
@@ -50,10 +54,27 @@ public class PeopleSerTestActivity extends Activity {
         peopleNum = sharedPreferences.getInt("peopleNumber", 0);
         String s = sharedPreferences.getString("peopleData", null);
 
-
-        if(peopleNum != 0) {
+        try {
             try {
-                people = deSerialization(s);
+                ArrayList<People> ps = deSerialization(s);
+                peoples = ps;
+            }
+            catch (ClassNotFoundException ex) {
+
+            }
+
+        }
+
+        catch (IOException e) {
+
+        }
+
+        print();
+
+
+       /* if(peopleNum != 0) {
+            try {
+                peoples = deSerialization(s);
             }
             catch (IOException e) {
                 Toast.makeText(PeopleSerTestActivity.this, "IoException: " + e.toString(), Toast.LENGTH_SHORT).show();
@@ -63,7 +84,7 @@ public class PeopleSerTestActivity extends Activity {
             }
 
             print();
-        }
+        }*/
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -74,9 +95,10 @@ public class PeopleSerTestActivity extends Activity {
 
                 people.setName(name);
                 people.setAge(age);
+                peoples.add(people);
 
-                try {
-                    editor.putString("peopleData", serialize(people));
+               /* try {
+                    editor.putString("peopleData", serialize());
                     peopleNum ++;
                     editor.putInt("peopleNumber", peopleNum);
                     editor.commit();
@@ -85,7 +107,7 @@ public class PeopleSerTestActivity extends Activity {
                 catch (IOException e) {
                     Toast.makeText(PeopleSerTestActivity.this, "IoException: " + e.toString(), Toast.LENGTH_SHORT).show();
                 }
-
+                */
 
                 print();
             }
@@ -95,10 +117,67 @@ public class PeopleSerTestActivity extends Activity {
 
     private void print() {
         serTextview.setText("");
-        serTextview.append("name: " + people.getName());
-        serTextview.append("age: " + people.getAge());
+        /*for(People p: peoples) {
+            serTextview.append("name: " + p.getName());
+            serTextview.append("age: " + p.getAge() + "\n");
+        }*/
+        try{
+            String ser = serialize();
+            //serTextview.setText("" + ser + "\n");
+            editor.putString("peopleData", ser);
+            peopleNum ++;
+            editor.putInt("peopleNumber", peopleNum);
+            editor.commit();
+
+            for(People p: peoples) {
+                serTextview.append("name: " + p.getName());
+                serTextview.append("age: " + p.getAge() + "\n");
+            }
+
+
+        }
+        catch (IOException e) {
+
+        }
+
+
+
     }
 
+    //序列化对象
+
+    private String serialize() throws IOException {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+                byteArrayOutputStream);
+        objectOutputStream.writeObject(peoples);
+        String serStr = byteArrayOutputStream.toString("ISO-8859-1");
+        serStr = java.net.URLEncoder.encode(serStr, "UTF-8");
+        objectOutputStream.close();
+        byteArrayOutputStream.close();
+        return serStr;
+    }
+
+    //反序列化对象
+
+    private ArrayList<People> deSerialization(String str) throws IOException,
+            ClassNotFoundException {
+
+        String redStr = java.net.URLDecoder.decode(str, "UTF-8");
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+                redStr.getBytes("ISO-8859-1"));
+        ObjectInputStream objectInputStream = new ObjectInputStream(
+                byteArrayInputStream);
+
+        ArrayList<People> p = (ArrayList<People>) objectInputStream.readObject();
+
+        objectInputStream.close();
+        byteArrayInputStream.close();
+        return p;
+    }
+
+    /*
     //序列化对象
 
     private String serialize(People p) throws IOException {
@@ -129,6 +208,5 @@ public class PeopleSerTestActivity extends Activity {
         byteArrayInputStream.close();
         return p;
     }
-
-
+    */
 }
