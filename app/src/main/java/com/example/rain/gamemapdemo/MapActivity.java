@@ -3,6 +3,8 @@ package com.example.rain.gamemapdemo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
@@ -27,6 +31,9 @@ public class MapActivity extends Activity implements GestureDetector.OnGestureLi
     private TextView mapText;
     private ImageView chicken;
     private GifImageView backGif;
+    private ArrayList<Location> locations;
+    private int xx, yy;
+    private Handler uiHandler;
 
 
     @Override
@@ -40,10 +47,17 @@ public class MapActivity extends Activity implements GestureDetector.OnGestureLi
         chicken = (ImageView) findViewById(R.id.chic);
         backGif = (GifImageView) findViewById(R.id.mapBg);
 
+        xx = 0;
+        yy = 0;
+        mapText.setText("Location:  " + xx + " , " + yy);
+
+        locations = new ArrayList<>();
+
         chicken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MapActivity.this, "X:" + currentX + " Y:" + currentY, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapActivity.this, "X:" + xx + " Y:" + yy, Toast.LENGTH_SHORT).show();
+                mapText.setText("Location:  " + xx + " , " + yy);
             }
         });
 
@@ -63,27 +77,54 @@ public class MapActivity extends Activity implements GestureDetector.OnGestureLi
             e.printStackTrace();
         }
 
+        uiHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+                switch (msg.what) {
+                    case 0x111:
+                        mapText.setText("Location:  " + xx + " , " + yy);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        };
+
+
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction())
         {
+            //first touch event
             case MotionEvent.ACTION_DOWN:
             {
                 currentX = (int) event.getRawX();
                 currentY = (int) event.getRawY();
                 break;
             }
+            //flash
             case MotionEvent.ACTION_MOVE:
             {
                 int x2 = (int) event.getRawX();
                 int y2 = (int) event.getRawY();
                 con.scrollBy(currentX - x2 , currentY - y2);
+                xx = xx + x2 - currentX;
+                yy = yy + currentY - y2;
                 currentX = x2;
                 currentY = y2;
+                //mapText.setText("Location:  " + xx + " , " + yy);
+                Message ms = new Message();
+                ms.what = 0x111;
+                uiHandler.sendMessage(ms);
                 break;
             }
+            //exit
             case MotionEvent.ACTION_UP:
             {
                 break;
@@ -124,5 +165,9 @@ public class MapActivity extends Activity implements GestureDetector.OnGestureLi
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         //Toast.makeText(MapActivity.this, "onFling", Toast.LENGTH_SHORT).show();
         return false;
+    }
+
+    private void initLocation() {
+        Location location = new Location(0,0);
     }
 }
