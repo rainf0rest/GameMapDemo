@@ -46,7 +46,7 @@ public class PeopleSerTestActivity extends Activity {
 
         serTextview = (TextView) findViewById(R.id.serializableText);
         serTextview.setMovementMethod(ScrollingMovementMethod.getInstance());
-        
+
         nameEdit = (EditText) findViewById(R.id.nameEditText);
         ageEdit = (EditText) findViewById(R.id.ageEditText);
         add = (Button) findViewById(R.id.serAddbtn);

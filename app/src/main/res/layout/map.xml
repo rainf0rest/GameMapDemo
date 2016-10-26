@@ -15,6 +15,11 @@
         android:text="Game Map!"
         android:id="@+id/mapText" />
 
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mapBg"/>
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"

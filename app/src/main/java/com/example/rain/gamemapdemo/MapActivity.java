@@ -12,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
+
 /**
  * Created by rain on 2016/10/23.
  */
@@ -23,6 +26,8 @@ public class MapActivity extends Activity implements GestureDetector.OnGestureLi
     private int currentX, currentY;
     private TextView mapText;
     private ImageView chicken;
+    private GifImageView backGif;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,7 @@ public class MapActivity extends Activity implements GestureDetector.OnGestureLi
         con = (LinearLayout) findViewById(R.id.con);
         mapText = (TextView) findViewById(R.id.mapText);
         chicken = (ImageView) findViewById(R.id.chic);
+        backGif = (GifImageView) findViewById(R.id.mapBg);
 
         chicken.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +46,22 @@ public class MapActivity extends Activity implements GestureDetector.OnGestureLi
                 Toast.makeText(MapActivity.this, "X:" + currentX + " Y:" + currentY, Toast.LENGTH_SHORT).show();
             }
         });
+
+        try {
+            // 如果加载的是gif动图，第一步需要先将gif动图资源转化为GifDrawable
+            // 将gif图资源转化为GifDrawable
+            GifDrawable gifDrawable = new GifDrawable(getResources(), R.drawable.map_background);
+
+            // gif1加载一个动态图gif
+            backGif.setImageDrawable(gifDrawable);
+
+
+            // 如果是普通的图片资源，就像Android的ImageView set图片资源一样简单设置进去即可。
+            // gif2加载一个普通的图片（如png，bmp，jpeg等等）
+            //gifImageView2.setImageResource(R.drawable.ic_launcher);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
