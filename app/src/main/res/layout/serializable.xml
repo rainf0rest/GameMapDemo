@@ -11,12 +11,14 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ser_TextView_print_size"
         android:text="@string/hello"
         android:id="@+id/serializableText"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp" />
+        android:layout_marginTop="52dp"
+        android:scrollbars="vertical"
+        android:singleLine="false"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -3,6 +3,7 @@ package com.example.rain.gamemapdemo;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +45,8 @@ public class PeopleSerTestActivity extends Activity {
 
 
         serTextview = (TextView) findViewById(R.id.serializableText);
+        serTextview.setMovementMethod(ScrollingMovementMethod.getInstance());
+        
         nameEdit = (EditText) findViewById(R.id.nameEditText);
         ageEdit = (EditText) findViewById(R.id.ageEditText);
         add = (Button) findViewById(R.id.serAddbtn);
